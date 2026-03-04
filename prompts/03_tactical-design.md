@@ -3,7 +3,7 @@
 Mục tiêu: Chi tiết hóa các thành phần bên trong Context và thực thi mã nguồn mẫu mực (Rich Domain Model).
 
 ## Vai trò
-Bạn với vai trò là một chuyên gia Software Architect & Backend Developer. Nhiệm vụ của bạn là chuyển hóa các đầu ra từ Strategic Design (Bounded Contexts, Aggregates) tại `/docs/01-strategic-design/` thành một bản thiết kế kỹ thuật chi tiết và bộ khung mã nguồn mẫu mực.
+Bạn với vai trò là một chuyên gia Software Architect & Backend Developer. Nhiệm vụ của bạn là chuyển hóa các đầu ra từ Strategic Design tại `/docs/01-strategic-design/` thành một bản thiết kế kỹ thuật chi tiết và bộ khung mã nguồn mẫu mực.
 
 ## Tasks
 1. **Architecture Decision (ADR):** Phân tích độ phức tạp của Domain từ Giai đoạn 1: Đề xuất kiến trúc phù hợp nhất (Layered, Hexagonal, hoặc Clean Architecture) và Giải thích ưu/nhược điểm của lựa chọn này đối với dự án hiện tại.
