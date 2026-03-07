@@ -1,0 +1,73 @@
+server:
+  port: ${APP_PORT:8080}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: oracle-ai-workspace
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  ai:
+    openai:
+      api-key: dummy
+      chat:
+        api-key: dummy
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=Oracle;DB_CLOSE_DELAY=-1
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:your-256-bit-secret-key-for-jwt-token-signing}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# Groq AI Configuration
+groq:
+  api-key: ${GROQ_API_KEY:}
+  base-url: https://api.groq.com/openai/v1
+  model: llama-3.1-8b-instant
+  max-retries: 3
+
+# Ollama Configuration
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+  model: ${OLLAMA_MODEL:sqlcoder:7b}
+  embedding-model: ${OLLAMA_EMBEDDING_MODEL:bge-base}
+  timeout: 120000
+
+# Gemini AI Configuration
+gemini:
+  api-key: ${GEMINI_API_KEY:}
+  model: gemini-2.0-flash
+  base-url: https://generativelanguage.googleapis.com/v1beta
+
+# Vector Configuration
+vector:
+  embedding:
+    batch-size: ${BATCH_SIZE:1000}
+    dimension: 768
+    timeout: 300000
+
+# Logging
+logging:
+  level:
+    root: ${LOG_LEVEL:INFO}
+    com.oracleai.workspace: DEBUG

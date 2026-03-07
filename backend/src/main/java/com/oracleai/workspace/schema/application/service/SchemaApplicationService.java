@@ -1,7 +1,6 @@
 package com.oracleai.workspace.schema.application.service;
 
 import com.oracleai.workspace.schema.domain.entity.SchemaMetadata;
-import com.oracleai.workspace.schema.domain.entity.SchemaMetadata.UserId;
 import com.oracleai.workspace.schema.application.port.in.ExtractSchemaUseCase;
 import com.oracleai.workspace.schema.application.port.out.SchemaRepository;
 import org.slf4j.Logger;
@@ -18,8 +17,8 @@ public class SchemaApplicationService implements ExtractSchemaUseCase {
     }
 
     @Override
-    public SchemaMetadata extractSchema(UserId userId) {
-        log.info("Extracting schema for user: {}", userId.value());
+    public SchemaMetadata extractSchema(String userId) {
+        log.info("Extracting schema for user: {}", userId);
         
         SchemaMetadata schema = schemaRepository.extractFromOracle(userId);
         
@@ -31,13 +30,13 @@ public class SchemaApplicationService implements ExtractSchemaUseCase {
     }
 
     @Override
-    public Optional<SchemaMetadata> getSchema(UserId userId) {
+    public Optional<SchemaMetadata> getSchema(String userId) {
         return schemaRepository.findByOwnerId(userId);
     }
 
     @Override
-    public SchemaMetadata refreshSchema(UserId userId) {
-        log.info("Refreshing schema for user: {}", userId.value());
+    public SchemaMetadata refreshSchema(String userId) {
+        log.info("Refreshing schema for user: {}", userId);
         
         SchemaMetadata schema = schemaRepository.extractFromOracle(userId);
         

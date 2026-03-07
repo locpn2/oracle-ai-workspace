@@ -21,7 +21,8 @@ public final class User {
         this.email = builder.email;
         this.roles = new HashSet<>(builder.roles);
         this.status = builder.status;
-        this.createdAt = builder.createdAt;
+        this.createdAt = builder.createdAt != null ? builder.createdAt : Instant.now();
+        this.lastLoginAt = builder.lastLoginAt;
     }
 
     public UserId getId() {
@@ -50,6 +51,10 @@ public final class User {
 
     public Optional<Instant> getLastLoginAt() {
         return Optional.ofNullable(lastLoginAt);
+    }
+
+    public HashedPassword getPassword() {
+        return password;
     }
 
     public void changePassword(String currentPassword, String newPassword) {
@@ -112,18 +117,6 @@ public final class User {
         return status == UserStatus.ACTIVE;
     }
 
-    public record UserId(java.util.UUID value) {
-        public UserId {
-            if (value == null) {
-                throw new IllegalArgumentException("User ID cannot be null");
-            }
-        }
-
-        public static UserId generate() {
-            return new UserId(java.util.UUID.randomUUID());
-        }
-    }
-
     public static class InvalidPasswordException extends RuntimeException {
         public InvalidPasswordException(String message) {
             super(message);
@@ -142,6 +135,7 @@ public final class User {
         private Set<Role> roles = Set.of(Role.USER);
         private UserStatus status = UserStatus.ACTIVE;
         private Instant createdAt = Instant.now();
+        private Instant lastLoginAt;
 
         public Builder id(UserId id) {
             this.id = id;
@@ -175,6 +169,16 @@ public final class User {
 
         public Builder status(UserStatus status) {
             this.status = status;
+            return this;
+        }
+
+        public Builder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder lastLoginAt(Instant lastLoginAt) {
+            this.lastLoginAt = lastLoginAt;
             return this;
         }
 

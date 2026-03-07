@@ -6,7 +6,7 @@ import java.util.*;
 
 public final class SchemaMetadata {
     private final SchemaId id;
-    private final UserId ownerId;
+    private final String ownerId;
     private final List<Table> tables;
     private final Instant extractedAt;
     private final SchemaVersion version;
@@ -19,25 +19,11 @@ public final class SchemaMetadata {
         this.version = builder.version;
     }
 
-    public SchemaId getId() {
-        return id;
-    }
-
-    public UserId getOwnerId() {
-        return ownerId;
-    }
-
-    public List<Table> getTables() {
-        return tables;
-    }
-
-    public Instant getExtractedAt() {
-        return extractedAt;
-    }
-
-    public SchemaVersion getVersion() {
-        return version;
-    }
+    public SchemaId getId() { return id; }
+    public String getOwnerId() { return ownerId; }
+    public List<Table> getTables() { return tables; }
+    public Instant getExtractedAt() { return extractedAt; }
+    public SchemaVersion getVersion() { return version; }
 
     public Optional<Table> getTable(TableName name) {
         return tables.stream()
@@ -73,7 +59,7 @@ public final class SchemaMetadata {
     }
 
     public SchemaMetadata withTables(List<Table> newTables) {
-        return Builder.builder()
+        return SchemaMetadata.builder()
             .id(this.id)
             .ownerId(this.ownerId)
             .tables(newTables)
@@ -82,84 +68,23 @@ public final class SchemaMetadata {
             .build();
     }
 
-    public record SchemaId(UUID value) {
-        public SchemaId {
-            if (value == null) {
-                throw new IllegalArgumentException("Schema ID cannot be null");
-            }
-        }
-
-        public static SchemaId generate() {
-            return new SchemaId(UUID.randomUUID());
-        }
-    }
-
-    public record UserId(UUID value) {
-        public UserId {
-            if (value == null) {
-                throw new IllegalArgumentException("User ID cannot be null");
-            }
-        }
-    }
-
-    public record SchemaVersion(int major, int minor) implements Comparable<SchemaVersion> {
-        public SchemaMetadata increment() {
-            return Builder.builder()
-                .id(SchemaId.generate())
-                .ownerId(this.ownerId)
-                .tables(this.tables)
-                .extractedAt(Instant.now())
-                .version(new SchemaVersion(major + 1, 0))
-                .build();
-        }
-
-        @Override
-        public int compareTo(SchemaVersion other) {
-            int cmp = Integer.compare(this.major, other.major);
-            return cmp != 0 ? cmp : Integer.compare(this.minor, other.minor);
-        }
-    }
-
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder {
         private SchemaId id = SchemaId.generate();
-        private UserId ownerId;
+        private String ownerId;
         private List<Table> tables = new ArrayList<>();
         private Instant extractedAt = Instant.now();
         private SchemaVersion version = new SchemaVersion(1, 0);
 
-        public Builder id(SchemaId id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder ownerId(UserId ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        public Builder tables(List<Table> tables) {
-            this.tables = tables;
-            return this;
-        }
-
-        public Builder addTable(Table table) {
-            this.tables.add(table);
-            return this;
-        }
-
-        public Builder extractedAt(Instant extractedAt) {
-            this.extractedAt = extractedAt;
-            return this;
-        }
-
-        public Builder version(SchemaVersion version) {
-            this.version = version;
-            return this;
-        }
+        public Builder id(SchemaId id) { this.id = id; return this; }
+        public Builder ownerId(String ownerId) { this.ownerId = ownerId; return this; }
+        public Builder tables(List<Table> tables) { this.tables = tables; return this; }
+        public Builder addTable(Table table) { this.tables.add(table); return this; }
+        public Builder extractedAt(Instant extractedAt) { this.extractedAt = extractedAt; return this; }
+        public Builder version(SchemaVersion version) { this.version = version; return this; }
 
         public SchemaMetadata build() {
             if (ownerId == null) {

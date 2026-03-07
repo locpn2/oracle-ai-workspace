@@ -1,14 +1,13 @@
 package com.oracleai.workspace.schema.application.port.out;
 
 import com.oracleai.workspace.schema.domain.entity.SchemaMetadata;
-import com.oracleai.workspace.schema.domain.entity.SchemaMetadata.SchemaId;
-import com.oracleai.workspace.schema.domain.entity.SchemaMetadata.UserId;
+import com.oracleai.workspace.schema.domain.valueobject.SchemaId;
 import java.util.Optional;
 
 public interface SchemaRepository {
-    SchemaMetadata extractFromOracle(UserId userId);
+    SchemaMetadata extractFromOracle(String userId);
     Optional<SchemaMetadata> findById(SchemaId id);
-    Optional<SchemaMetadata> findByOwnerId(UserId ownerId);
+    Optional<SchemaMetadata> findByOwnerId(String ownerId);
     void save(SchemaMetadata schema);
     void delete(SchemaId id);
 }
