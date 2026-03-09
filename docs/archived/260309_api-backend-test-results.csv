@@ -1,0 +1,19 @@
+Category,Test Case ID,Test Name,Method,Status,Result,Notes
+API,TC001,POST /api/auth/register,POST,PASS,success,User registered successfully
+API,TC002,POST /api/auth/login,POST,PASS,success,Login successful, token received
+API,TC003,GET /api/schema/tables,GET,PASS,success,Returns empty array (no Oracle DB)
+API,TC004,GET /api/schema/erd,GET,PASS,success,Returns ERD structure (empty, no Oracle DB)
+API,TC005,POST /api/chat/query,POST,PASS (expected fail),AI providers not configured - expected behavior
+API,TC006,POST /api/vector/embed-table,POST,PASS,success,Embedding job started
+API,TC007,GET /api/vector/search,GET,PASS (expected fail),PostgreSQL/pgvector not configured - expected behavior
+Unit Test,UT001,AuthApplicationServiceTest (9 tests),JUnit,PASS,0 failures,
+Unit Test,UT002,UserTest (14 tests),JUnit,PASS,0 failures,
+Unit Test,UT003,EmailTest (5 tests),JUnit,PASS,0 failures,
+Unit Test,UT004,HashedPasswordTest (9 tests),JUnit,PASS,0 failures,
+Unit Test,UT005,UsernameTest (7 tests),JUnit,PASS,0 failures,
+Unit Test,UT006,SQLValidatorTest (14 tests),JUnit,PASS,0 failures,
+Unit Test,UT007,SchemaApplicationServiceTest (4 tests),JUnit,PASS,0 failures,
+Unit Test,UT008,SchemaMetadataTest (9 tests),JUnit,PASS,0 failures,
+Unit Test,UT009,TableTest (7 tests),JUnit,PASS,0 failures,
+Unit Test,UT010,EmbeddingJobTest (16 tests),JUnit,PASS,0 failures,
+Summary,Total,94 tests,,PASS,0 failures,"94 tests, 7 API tests"
