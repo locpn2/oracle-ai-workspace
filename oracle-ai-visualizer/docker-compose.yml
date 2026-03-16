@@ -1,0 +1,71 @@
+version: '3.9'
+
+services:
+  # Oracle Database 23c Free
+  oracle-db:
+    image: container-registry.oracle.com/database/express:23.5.0-xe
+    container_name: oracle-db
+    environment:
+      ORACLE_PDB: ORCL
+      ORACLE_PWD: OraclePass123
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "-connected", "-t", "30"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ChromaDB Vector Database
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: chroma
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+
+  # Ollama for Local AI
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+
+  # Spring Boot Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oracle-ai-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:oracledb
+      - ORACLE_HOST=oracle-db
+      - ORACLE_PORT=1521
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - CHROMA_HOST=chroma
+      - CHROMA_PORT=8000
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+      ollama:
+        condition: service_started
+
+volumes:
+  oracle-data:
+  chroma-data:
+  ollama-data:

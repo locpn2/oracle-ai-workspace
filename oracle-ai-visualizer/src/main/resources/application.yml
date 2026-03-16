@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: oracle-ai-visualizer
+  
+  datasource:
+    url: jdbc:h2:mem:oracledb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 8080
+
+# Oracle Database Configuration
+oracle:
+  host: ${ORACLE_HOST:localhost}
+  port: ${ORACLE_PORT:1521}
+  service: ${ORACLE_SERVICE:ORCL}
+  username: ${ORACLE_USERNAME:}
+  password: ${ORACLE_PASSWORD:}
+
+# Ollama Configuration
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+  chat-model: ${OLLAMA_MODEL:llama3.1}
+  embed-model: ${OLLAMA_EMBED_MODEL:mxbai-embed-large}
+
+# ChromaDB Configuration
+chroma:
+  host: ${CHROMA_HOST:localhost}
+  port: ${CHROMA_PORT:8000}
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:oracle-ai-visualizer-secret-key-256-bit-long}
+  expiration: 86400000
+
+# Logging
+logging:
+  level:
+    com.oracleai: DEBUG
+    org.springframework.security: INFO
