@@ -33,6 +33,16 @@ class DatabaseError(OracleVisionException):
         super().__init__(message, status_code=500)
 
 
+class DatabaseConnectionError(DatabaseError):
+    def __init__(self, message: str = "Database connection failed"):
+        super().__init__(message)
+
+
+class DatabaseQueryError(DatabaseError):
+    def __init__(self, message: str = "Database query failed"):
+        super().__init__(message)
+
+
 class LLMError(OracleVisionException):
     def __init__(self, message: str = "LLM processing error"):
         super().__init__(message, status_code=500)

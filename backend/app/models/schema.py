@@ -18,7 +18,7 @@ class ForeignKey(BaseModel):
 
 class Table(BaseModel):
     name: str
-    schema: str = "dbo"
+    db_schema: str = "dbo"
     columns: list[Column] = []
     primary_keys: list[str] = []
     foreign_keys: list[ForeignKey] = []

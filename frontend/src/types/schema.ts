@@ -1,6 +1,6 @@
 export interface Table {
   name: string
-  schema: string
+  db_schema: string
   columns: Column[]
   primaryKeys: string[]
   foreignKeys: ForeignKey[]

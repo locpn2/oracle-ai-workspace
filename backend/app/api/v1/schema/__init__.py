@@ -16,7 +16,7 @@ async def get_tables():
             details = await oracle_db.get_table_details(table_info["name"])
             tables.append(Table(
                 name=details["name"],
-                schema=table_info.get("schema", "dbo"),
+                db_schema=table_info.get("schema", "dbo"),
                 columns=details["columns"],
                 primary_keys=[c["name"] for c in details["columns"] if c["is_primary_key"]],
                 foreign_keys=details.get("foreign_keys", []),
@@ -32,7 +32,7 @@ async def get_table(table_name: str):
         details = await oracle_db.get_table_details(table_name)
         return Table(
             name=details["name"],
-            schema="dbo",
+            db_schema="dbo",
             columns=details["columns"],
             primary_keys=[c["name"] for c in details["columns"] if c["is_primary_key"]],
             foreign_keys=details.get("foreign_keys", []),
