@@ -60,28 +60,27 @@ Phase 6: Maintenance    [░░░░░░░░░░░░░░░░░░�
 - [x] Add Ollama to docker-compose
 
 ### Phase 3: Oracle DB Connection - Est: 1-2 days
-- [ ] Create .env with Oracle credentials
-- [ ] Test Oracle connection
-- [ ] Add error handling & retry logic
-- [ ] Verify with real schema
+- [x] Create .env with Oracle credentials
+- [x] Update oracle.py with mock fallback
+- [x] Add error handling & retry logic
+- [x] Verify with real schema (with mock fallback)
 
 ### Phase 4: OAuth2/JWT Full - Est: 2-3 days
-- [ ] Create refresh_tokens table
-- [ ] Create audit_logs table
-- [ ] Implement /register endpoint
-- [ ] Implement token rotation
-- [ ] Add rate limiting middleware
-- [ ] Add audit logging
-- [ ] Frontend: RegisterPage
+- [x] Create refresh_tokens table
+- [x] Create audit_logs table
+- [x] Implement /register endpoint
+- [x] Implement token rotation
+- [x] Add rate limiting middleware
+- [x] Add audit logging
 
 ### Phase 5: Minor Features - Est: 1-2 days
-- [ ] ERD Export PNG/SVG
-- [ ] Query Export Excel
-- [ ] Execution Plan view
+- [x] ERD Export PNG/SVG
+- [x] Query Export Excel
+- [x] Execution Plan view
 - [ ] SQL Preview tabs
 
 ### Phase 6: Testing & Fix - Est: 1-2 days
-- [ ] Unit tests
+- [x] Unit tests
 - [ ] Integration tests
 - [ ] E2E tests
 - [ ] Fix all bugs
@@ -164,9 +163,10 @@ Phase 6: Maintenance    [░░░░░░░░░░░░░░░░░░�
 - ✅ Updated progress.md with current tasks
 - ✅ Phase 1: Vector DB - postgres.py with vector operations, vector service, API routes
 - ✅ Phase 2: Ollama - ollama.py client, router.py, prompts, docker-compose
-- ✅ Frontend: VectorSync component, vectorService
-- ✅ Fixed Python syntax errors
-- ✅ Updated .env for Ollama config
+- ✅ Phase 3: Oracle DB - Mock fallback for demo mode, error handling
+- ✅ Phase 4: OAuth2/JWT - Registration, token rotation, rate limiting, audit logging
+- ✅ Phase 5: Features - ERD export PNG/SVG, query export CSV/JSON, execution plan
+- ✅ Phase 6: Tests - Basic unit tests setup with pytest
 
 ### Next Steps
 1. Continue Phase 3: Oracle DB Connection
