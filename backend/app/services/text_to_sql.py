@@ -90,4 +90,4 @@ SQL:"""
     }
 
 
-text_to_sql_service = type('obj', (object,), {'convert': convert_text_to_sql})()
+text_to_sql_service = type('obj', (object,), {'convert': lambda self, nl, ctx=None: convert_text_to_sql(nl, ctx)})()
