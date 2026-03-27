@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import { ReactFlowProvider } from '@xyflow/react'
 import { Layout } from './components/common/Layout'
 import { LoginPage } from './pages/LoginPage'
 import { ERDPage } from './pages/ERDPage'
@@ -32,7 +33,11 @@ function App() {
           }
         >
           <Route index element={<Navigate to="/erd" replace />} />
-          <Route path="erd" element={<ERDPage />} />
+          <Route path="erd" element={
+            <ReactFlowProvider>
+              <ERDPage />
+            </ReactFlowProvider>
+          } />
           <Route path="query" element={<QueryPage />} />
           <Route path="schema" element={<SchemaPage />} />
         </Route>

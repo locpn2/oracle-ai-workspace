@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import {
   ReactFlow,
   Background,
@@ -7,6 +7,7 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
+  useReactFlow,
 } from '@xyflow/react'
 import type { Connection, Node, Edge } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
@@ -15,9 +16,46 @@ import { Loader2, RefreshCw, Download } from 'lucide-react'
 import { schemaService } from '@/services/schemaService'
 import { TableNode } from '@/components/erd/TableNode'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const nodeTypes: any = {
+const nodeTypes: Record<string, React.ComponentType<any>> = {
   table: TableNode,
+}
+
+function DownloadButton({ format }: { format: 'png' | 'svg' }) {
+  const { getNodes } = useReactFlow()
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleExport = async () => {
+    const nodes = getNodes()
+    if (nodes.length === 0) return
+
+    const container = document.querySelector('.react-flow') as HTMLElement
+    if (!container) return
+
+    try {
+      const { toPng, toSvg } = await import('html-to-image')
+      
+      const dataUrl = format === 'png' 
+        ? await toPng(container, { backgroundColor: '#ffffff' })
+        : await toSvg(container, { backgroundColor: '#ffffff' })
+      
+      const link = document.createElement('a')
+      link.download = `erd-export.${format}`
+      link.href = dataUrl
+      link.click()
+    } catch (error) {
+      console.error('Export failed:', error)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleExport}
+      className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+      title={`Export ${format.toUpperCase()}`}
+    >
+      <Download className="w-5 h-5" />
+    </button>
+  )
 }
 
 export function ERDPage() {
@@ -58,12 +96,8 @@ export function ERDPage() {
           >
             <RefreshCw className={`w-5 h-5 ${isFetching ? 'animate-spin' : ''}`} />
           </button>
-          <button
-            className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
-            title="Export PNG"
-          >
-            <Download className="w-5 h-5" />
-          </button>
+          <DownloadButton format="png" />
+          <DownloadButton format="svg" />
         </div>
       </div>
 

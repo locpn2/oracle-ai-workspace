@@ -1,5 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
+from fastapi.responses import StreamingResponse
 import time
+import csv
+import json
+import io
 from ....models.query import QueryRequest, QueryResponse, ExecuteRequest, ExecuteResponse, QueryHistory
 from ....db.oracle import oracle_db
 from ....services.text_to_sql import text_to_sql_service
@@ -64,9 +68,75 @@ async def get_history(limit: int = 50):
 
 
 @router.post("/preview")
-async def preview_sql(sql: str):
+async def preview_sql(sql: str = Body(..., embed=True)):
     try:
-        await oracle_db.execute_query(f"EXPLAIN PLAN FOR {sql}")
-        return {"valid": True}
+        result = await oracle_db.execute_query(f"EXPLAIN PLAN FOR {sql}", 1, 10)
+        return {
+            "valid": True,
+            "plan": result.get("rows", []),
+            "message": "Query is valid for execution"
+        }
     except Exception as e:
         return {"valid": False, "error": str(e)}
+
+
+@router.post("/explain")
+async def explain_query(sql: str = Body(..., embed=True)):
+    """Get query execution plan"""
+    try:
+        explain_sql = f"EXPLAIN PLAN FOR {sql}"
+        result = await oracle_db.execute_query(explain_sql, 1, 100)
+        
+        plan_output = []
+        for row in result.get("rows", []):
+            plan_output.append({
+                "operation": row.get("OPERATION", ""),
+                "object_name": row.get("OBJECT_NAME", ""),
+                "options": row.get("OPTIONS", ""),
+            })
+        
+        return {
+            "sql": sql,
+            "plan": plan_output,
+            "estimated_rows": result.get("total_rows", 0)
+        }
+    except Exception as e:
+        return {
+            "sql": sql,
+            "plan": [],
+            "error": str(e),
+            "estimated_rows": 0
+        }
+
+
+@router.post("/export")
+async def export_results(request: ExecuteRequest, format: str = "csv"):
+    """Export query results in various formats"""
+    try:
+        result = await oracle_db.execute_query(request.sql, 1, 10000)
+        
+        if format == "csv":
+            output = io.StringIO()
+            writer = csv.DictWriter(output, fieldnames=result["columns"])
+            writer.writeheader()
+            for row in result["rows"]:
+                writer.writerow(row)
+            
+            return StreamingResponse(
+                io.BytesIO(output.getvalue().encode('utf-8')),
+                media_type="text/csv",
+                headers={"Content-Disposition": "attachment; filename=query_results.csv"}
+            )
+        
+        elif format == "json":
+            return {
+                "columns": result["columns"],
+                "rows": result["rows"],
+                "total_rows": result["total_rows"]
+            }
+        
+        else:
+            raise HTTPException(status_code=400, detail=f"Unsupported format: {format}")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
