@@ -74,11 +74,11 @@ services:
     networks:
       - oracle-vision
     healthcheck:
-      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s oraclevision/vision123@localhost:1521/XEPDB1"]
+      test: ["CMD-SHELL", "sqlplus -s system/oracle123@//localhost:1521/XEPDB1 <<< 'SELECT 1 FROM DUAL;' | grep -q '1'"]
       interval: 30s
       timeout: 20s
-      retries: 10
-      start_period: 180s
+      retries: 15
+      start_period: 300s
     restart: unless-stopped
 
   # PostgreSQL with pgvector
