@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from .core.exceptions import add_exception_handlers
 from .api.v1 import auth, schema, query, vector
+from .middleware.rate_limit import rate_limit_middleware
 
 app = FastAPI(
     title="OracleVision API",
@@ -21,6 +22,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def rate_limit(request: Request, call_next):
+    return await rate_limit_middleware(request, call_next)
 
 add_exception_handlers(app)
 

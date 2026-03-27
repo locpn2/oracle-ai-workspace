@@ -33,6 +33,14 @@ class UserInDB(User):
     hashed_password: str
 
 
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    name: str
+    is_active: Optional[bool] = True
+    created_at: Optional[datetime] = None
+
+
 class LoginRequest(BaseModel):
     email: str
     password: str
@@ -42,3 +50,7 @@ class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: User
+
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
