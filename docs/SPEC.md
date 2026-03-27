@@ -13,7 +13,7 @@ VecBase là công cụ trực quan hóa dữ liệu Oracle DB tích hợp AI-pow
 
 ### Technical Goals
 - **High performance**: Schema load < 2s, Query response < 5s
-- **High accuracy**: AI query accuracy > 85%
+- **High accuracy**: AI query accuracy > 90%
 - **Scalability**: Support 50+ concurrent users
 
 ## 3. Stakeholders
@@ -89,7 +89,7 @@ VecBase là công cụ trực quan hóa dữ liệu Oracle DB tích hợp AI-pow
 - [ ] Generate SQL from natural language
 - [ ] Display generated SQL for transparency
 - [ ] Execute query and show results
-- [ ] Query accuracy > 85%
+- [ ] Query accuracy > 90%
 
 **Priority:** P0 (Must Have)
 
@@ -110,7 +110,7 @@ Output: SELECT * FROM employees WHERE department = 'IT'
 - [ ] Store last 100 queries per user
 - [ ] Search query history
 - [ ] Re-run previous queries
-- [ ] Export query history
+- [ ] Export query history to CSV and JSON formats
 
 **Priority:** P1 (Should Have)
 
@@ -252,7 +252,7 @@ Output: SELECT * FROM employees WHERE department = 'IT'
 
 **Acceptance Criteria:**
 - [ ] Create/edit/delete users
-- [ ] Assign roles (Admin, User, Viewer)
+- [ ] Assign roles (Admin, User, Viewer, Developer)
 - [ ] Set permissions per feature
 - [ ] View user activity logs
 
@@ -287,7 +287,7 @@ Output: SELECT * FROM employees WHERE department = 'IT'
 ### 5.2 Security
 - Authentication: JWT with refresh tokens
 - Authorization: Role-based access control
-- Encryption: TLS 1.3 for all connections
+- Encryption: TLS 1.3 for all connections, AES-256 encryption at rest
 - Audit: Log all data access
 - Password: bcrypt hashing
 
@@ -317,14 +317,14 @@ Output: SELECT * FROM employees WHERE department = 'IT'
 - Must support Vietnamese language
 
 ### Business Constraints
-- Budget: [TBD]
+- Budget: Self-funded (~$0)
 - Timeline: 8 weeks for MVP
-- Team: 4 people (2 backend, 1 frontend, 1 AI)
+- Team: 1 Solo Developer (Multi-role: Backend + Frontend + AI + DBA)
 
 ### Regulatory Constraints
-- Data privacy: GDPR compliance (if applicable)
-- Data retention: [TBD]
-- Audit requirements: [TBD]
+- Data privacy: Internal data only (no external compliance required)
+- Data retention: 1 year for query history
+- Audit requirements: Detailed logging for production
 
 ## 7. Assumptions
 
@@ -332,7 +332,7 @@ Output: SELECT * FROM employees WHERE department = 'IT'
 2. OpenAI API is available and reliable
 3. Users have basic computer literacy
 4. Network bandwidth is sufficient for real-time queries
-5. Data volume is moderate (< 1TB)
+5. Data volume is moderate (1-10GB)
 
 ## 8. Dependencies
 
@@ -352,7 +352,7 @@ Output: SELECT * FROM employees WHERE department = 'IT'
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | User adoption | 80% of target users | Active users / Total users |
-| Query accuracy | > 85% | Correct queries / Total queries |
+| Query accuracy | > 90% | Correct queries / Total queries |
 | User satisfaction | > 4/5 | Survey score |
 | System uptime | 99.9% | Uptime / Total time |
 | Conversion success | > 95% | Successful conversions / Total |
@@ -382,16 +382,27 @@ Output: SELECT * FROM employees WHERE department = 'IT'
 | Scope creep | Medium | High | Strict change control |
 | Team turnover | High | Low | Documentation, knowledge sharing |
 
+### Additional Risks
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| AWS service outage | High | Low | Multi-AZ deployment, backup plan |
+| OpenAI API rate limits | High | Medium | Fallback to local LLM (Llama 2) |
+| Oracle XE limitations | Medium | Medium | Monitor storage/CPU usage, upgrade plan |
+
 ## 12. Approval
+
+**Note:** This section will be completed after stakeholder review and sign-off using REVIEW_CHECKLIST.md
 
 | Role | Name | Date | Signature |
 |------|------|------|-----------|
-| Project Sponsor | [TBD] | [TBD] | [TBD] |
-| Technical Lead | [TBD] | [TBD] | [TBD] |
-| Product Owner | [TBD] | [TBD] | [TBD] |
+| Project Sponsor | locpn2 | 27/03/2026 | ______________ |
+| Technical Lead | locpn2 | 27/03/2026 | ______________ |
+| Product Owner | locpn2 | 27/03/2026 | ______________ |
+| DBA Representative | locpn2 | 27/03/2026 | ______________ |
+| AI Engineer | locpn2 | 27/03/2026 | ______________ |
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: 26/03/2026  
-**Next Review**: 02/04/2026
+**Document Version**: 1.1  
+**Last Updated**: 27/03/2026  
+**Next Review**: 03/04/2026
