@@ -538,8 +538,71 @@ oracle-vision/
 - [ ] Documentation complete
 - [ ] Runbooks created
 
+## 12. Implementation Plan
+
+### 12.1 Current Status
+
+| Feature | Current Status | Target | Priority |
+|---------|----------------|--------|----------|
+| FR-04: Vector DB | Stub (20%) | Full Implementation | P0 |
+| Oracle DB Connection | Mock | Real Connection | P0 |
+| LLM Integration (Ollama) | Mock | Ollama Integration | P0 |
+| OAuth2/JWT | Demo (50%) | Full OAuth2 | P1 |
+| ERD Export PNG/SVG | Button only | Full Implementation | P1 |
+| Query Execution (Excel/Plan) | Basic | Full Features | P1 |
+| SQL Preview Tabs | Single | Multiple Tabs | P2 |
+
+### 12.2 Technology Decisions
+
+| Component | Decision | Rationale |
+|-----------|----------|-----------|
+| Vector DB | pgvector | Already in docker-compose |
+| Embedding Model | Ollama (nomic-embed-text) | Privacy-friendly, free |
+| LLM for SQL | Ollama (llama3.2) | Local, no API costs |
+| Oracle Client | oracledb | Official thin client |
+
+### 12.3 Implementation Phases
+
+#### Phase 1: Vector DB (pgvector)
+- Update postgres.py - Add vector operations
+- Create vector service (embed, sync, search)
+- Update vector API routes
+- Integrate with text-to-sql
+- Frontend: VectorSync + SemanticSearch
+
+#### Phase 2: Ollama Integration
+- Create LLM router
+- Create Ollama client
+- Update text-to-sql service
+- Test with llama3.2 model
+
+#### Phase 3: Oracle DB Connection
+- Add credentials to .env
+- Test Oracle connection
+- Add error handling
+- Verify with real schema
+
+#### Phase 4: OAuth2/JWT Full
+- Create refresh_tokens table
+- Create audit_logs table
+- Implement /register endpoint
+- Implement token rotation
+- Add rate limiting
+- Add audit logging
+
+#### Phase 5: Minor Features
+- ERD Export PNG/SVG
+- Query Export Excel
+- Execution Plan view
+- SQL Preview tabs
+
+#### Phase 6: Testing & Fix
+- Unit tests
+- Integration tests
+- Fix bugs
+
 ---
 
-*Document Version: 1.0*
-*Created: 2026-03-26*
-*Status: Draft*
+*Document Version: 1.1*
+*Updated: 2026-03-27*
+*Status: Updated with Implementation Plan*

@@ -2,14 +2,16 @@
 CREATE EXTENSION IF NOT EXISTS vector;
 
 -- Create schema table for vector storage
+-- Using 768 dimensions (nomic-embed-text model)
 CREATE TABLE IF NOT EXISTS schema_embeddings (
     id SERIAL PRIMARY KEY,
     table_name VARCHAR(255) NOT NULL,
     column_name VARCHAR(255),
     description TEXT,
-    embedding vector(1536),
+    embedding vector(768),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(table_name, column_name)
 );
 
 -- Create index for vector search

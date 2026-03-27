@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus, Search, Loader2, Table2, ChevronRight } from 'lucide-react'
+import { Plus, Search, Loader2, Table2, ChevronRight, Brain } from 'lucide-react'
 import { schemaService } from '@/services/schemaService'
+import { VectorSync } from '@/components/vector/VectorSync'
 
 const GROUP_COLORS = [
   '#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#8b5cf6', '#ec4899'
@@ -125,6 +126,11 @@ export function SchemaPage() {
               <span className="text-xs text-gray-500">{group.tableNames.length}</span>
             </div>
           ))}
+        </div>
+
+        {/* Vector Sync Component */}
+        <div className="mt-4 pt-4 border-t">
+          <VectorSync />
         </div>
       </div>
 

@@ -81,6 +81,25 @@ services:
       start_period: 300s
     restart: unless-stopped
 
+  # Ollama for LLM and Embeddings
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - oracle-vision
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
   # PostgreSQL with pgvector
   postgres:
     image: pgvector/pgvector:pg15
@@ -126,6 +145,8 @@ volumes:
   postgres-data:
     driver: local
   redis-data:
+    driver: local
+  ollama-data:
     driver: local
 
 # Docker Network
