@@ -18,6 +18,7 @@ class ExecuteRequest(BaseModel):
     sql: str
     page: int = 1
     page_size: int = 100
+    format: str = "csv"
 
 
 class ExecuteResponse(BaseModel):

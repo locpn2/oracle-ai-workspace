@@ -81,8 +81,9 @@ async def preview_sql(sql: str = Body(..., embed=True)):
 
 
 @router.post("/explain")
-async def explain_query(sql: str = Body(..., embed=True)):
+async def explain_query(request: dict):
     """Get query execution plan"""
+    sql = request.get("sql", "")
     try:
         explain_sql = f"EXPLAIN PLAN FOR {sql}"
         result = await oracle_db.execute_query(explain_sql, 1, 100)
@@ -110,33 +111,28 @@ async def explain_query(sql: str = Body(..., embed=True)):
 
 
 @router.post("/export")
-async def export_results(request: ExecuteRequest, format: str = "csv"):
+async def export_results(request: ExecuteRequest):
     """Export query results in various formats"""
     try:
         result = await oracle_db.execute_query(request.sql, 1, 10000)
         
-        if format == "csv":
-            output = io.StringIO()
-            writer = csv.DictWriter(output, fieldnames=result["columns"])
-            writer.writeheader()
-            for row in result["rows"]:
-                writer.writerow(row)
-            
-            return StreamingResponse(
-                io.BytesIO(output.getvalue().encode('utf-8')),
-                media_type="text/csv",
-                headers={"Content-Disposition": "attachment; filename=query_results.csv"}
-            )
-        
-        elif format == "json":
+        if request.format == "json":
             return {
                 "columns": result["columns"],
                 "rows": result["rows"],
                 "total_rows": result["total_rows"]
             }
         
-        else:
-            raise HTTPException(status_code=400, detail=f"Unsupported format: {format}")
-    
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=result["columns"])
+        writer.writeheader()
+        for row in result["rows"]:
+            writer.writerow(row)
+        
+        return StreamingResponse(
+            io.BytesIO(output.getvalue().encode('utf-8')),
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=query_results.csv"}
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
