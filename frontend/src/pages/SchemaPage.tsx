@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus, Search, Loader2, Table2, ChevronRight, Brain } from 'lucide-react'
+import { Plus, Search, Loader2, Table2, ChevronRight } from 'lucide-react'
 import { schemaService } from '@/services/schemaService'
 import { VectorSync } from '@/components/vector/VectorSync'
 

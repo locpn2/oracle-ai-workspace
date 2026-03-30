@@ -63,26 +63,48 @@ class OracleConnection:
         self._connected = False
         self._use_mock = False
     
-    def connect(self):
+    def connect(self, max_retries: int = 5, retry_delay: float = 2.0):
         if not self._use_mock:
-            try:
-                if not self.pool:
-                    dsn = f"{settings.oracle_host}:{settings.oracle_port}/{settings.oracle_service}"
-                    self.pool = oracledb.create_pool(
-                        user=settings.oracle_user,
-                        password=settings.oracle_password,
-                        dsn=dsn,
-                        min=2,
-                        max=10,
-                        increment=1,
-                        timeout=30,
-                    )
-                return self.pool
-            except Exception as e:
-                print(f"Oracle connection failed: {e}, using mock data")
-                self._use_mock = True
-                self._connected = False
-                return None
+            import asyncio
+            
+            last_error = None
+            for attempt in range(max_retries):
+                try:
+                    if not self.pool:
+                        dsn = f"{settings.oracle_host}:{settings.oracle_port}/{settings.oracle_service}"
+                        self.pool = oracledb.create_pool(
+                            user=settings.oracle_user,
+                            password=settings.oracle_password,
+                            dsn=dsn,
+                            min=2,
+                            max=10,
+                            increment=1,
+                            timeout=30,
+                        )
+                    test_conn = self.pool.acquire()
+                    try:
+                        cursor = test_conn.cursor()
+                        cursor.execute("SELECT 1 FROM DUAL")
+                        cursor.fetchone()
+                    finally:
+                        self.pool.release(test_conn)
+                    
+                    print(f"Oracle connection successful on attempt {attempt + 1}")
+                    return self.pool
+                except Exception as e:
+                    last_error = e
+                    print(f"Oracle connection attempt {attempt + 1}/{max_retries} failed: {e}")
+                    
+                    if attempt < max_retries - 1:
+                        import time
+                        delay = retry_delay * (2 ** attempt)
+                        print(f"Retrying in {delay:.1f} seconds...")
+                        time.sleep(delay)
+            
+            print(f"Oracle connection failed after {max_retries} attempts: {last_error}, using mock data")
+            self._use_mock = True
+            self._connected = False
+            return None
         return None
     
     @contextmanager

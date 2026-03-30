@@ -8,6 +8,8 @@ export interface QueryResponse {
   confidence: number
   explanation?: string
   error?: string
+  llm_used?: boolean
+  model?: string
 }
 
 export interface ExecuteRequest {

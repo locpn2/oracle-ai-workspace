@@ -35,8 +35,11 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "llama3.2"
+    ollama_small_model: str = "phi3:mini"
     ollama_embed_model: str = "nomic-embed-text"
-    default_llm_provider: str = "openai"
+    default_llm_provider: str = "ollama"
+    llm_request_timeout: int = 30
+    llm_ollama_timeout: int = 60
     
     class Config:
         env_file = ".env"

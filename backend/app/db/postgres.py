@@ -92,9 +92,9 @@ class VectorDB:
             embedding_str = f"[{','.join(map(str, query_embedding))}]"
             result = conn.execute(text("""
                 SELECT table_name, column_name, description,
-                       1 - (embedding <=> :query_embedding::vector) as similarity
+                       1 - (embedding <=> CAST(:query_embedding AS vector)) as similarity
                 FROM schema_embeddings
-                ORDER BY embedding <=> :query_embedding::vector
+                ORDER BY embedding <=> CAST(:query_embedding AS vector)
                 LIMIT :top_k
             """), {"query_embedding": embedding_str, "top_k": top_k})
             

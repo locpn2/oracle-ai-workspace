@@ -23,4 +23,16 @@ export const queryService = {
     const response = await apiClient.post<{ valid: boolean; error?: string }>('/query/preview', { sql })
     return response.data
   },
+  
+  export: async (sql: string, format: 'csv' | 'json' | 'xlsx' = 'csv'): Promise<Blob> => {
+    const response = await apiClient.post('/query/export', {
+      sql,
+      page: 1,
+      page_size: 10000,
+      format,
+    }, {
+      responseType: 'blob',
+    })
+    return response.data
+  },
 }

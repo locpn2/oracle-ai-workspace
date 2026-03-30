@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 import {
   ReactFlow,
   Background,
@@ -22,7 +22,6 @@ const nodeTypes: Record<string, React.ComponentType<any>> = {
 
 function DownloadButton({ format }: { format: 'png' | 'svg' }) {
   const { getNodes } = useReactFlow()
-  const ref = useRef<HTMLDivElement>(null)
 
   const handleExport = async () => {
     const nodes = getNodes()
